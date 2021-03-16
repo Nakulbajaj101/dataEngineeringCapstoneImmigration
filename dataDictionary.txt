@@ -1,0 +1,97 @@
+demographics_dm (State level profile of the demographics in the state)
+    state_code (string) [primary key, refrences - immigration_ft.addr] : Two letter state code
+    state_name (string) [not null] : Full State name (USA)
+    median_age (double) [not null] : Median age of the state 
+    male_population (integer) [not null] : Total male counts in a state
+    female_population (integer) [not null] : Total female counts in a state
+    total_population (integer) [not null] : Total population of a state
+    veterans_population (integer) [not null] : Total veterans in a state
+    foreign_born_population (integer) [not null] : Total counts of people who were born outside USA
+    household_size_avg (double) : Average number of people in a house at a state level
+    american_indian_and_alaskan_native_population (integer) : Total number of american indians or alaskan people in a state
+    asian_population (integer) : Total number of asian people living in the state
+    black_or_african_american_populaton (integer) : Total number of black african people living in the state
+    hispanic_latino_population (integer) : Total number of hispanic or latin people living in the state
+    white_population (integer) : Total number of white people living in the state
+ 
+immi_dates_dm (Date features for arrival and departure dates as per immigration fact table)
+    date_date (date) [primary key, references - immigration_ft.arr_date, immigration_ft.dept_date] : arrival and departure dates eg. 2000-12-31
+    year (integer) [not null] : year extracted from date
+    month (integer) [not null] : month extracted from date in a number format
+    month_name (string) [not null] : month name in a full (string) format eg. January
+    day (integer) [not null] : day of the month in a number format
+    week (integer) [not null] : week of the year in a number format
+    day_of_week (integer) [not null] : day of the week from (0-6)
+    day_of_week_name (string) [not null] : day of the week name in a three letter (string) format eg. Sun
+ 
+airports_dm (Airports related information, such as name, location, codes)
+    id (string) [primary key] : identifier for the airport
+    type (string) [not null] : Type of airport (small, medium, large, closed, heliport)
+    name (string) [not null] : Name of the airport
+    elevation_ft (double): Elevation of the airport in feet
+    continent (string) [not null] : Continent in two letter where airport is located 
+    iso_country (string) [not null] : ISO standard of country code eg. AU for Australia
+    iso_region (string) [not null] : ISO standard for region, combination of country and their region
+    municipality (string) : Name of the city where airort is located
+    gps_code (string) : GPS code attached to airport for location identification
+    iata_code (string) [not null] : [foreign key references - immigration_ft.port] - code available by world authorities and is assigned to airports , especially for international airports
+    region_code (string) [not null] : Region code extracted from iso_region
+    latitude (double) [not null] : latitude location of the airport
+    longitude (double) [not null] : longitude location of the airport
+
+regions_dm (Countries/Regions/Cities and temperature profile of where people come from when travelling to USA)
+    cit_res_code (integer) [primary key, references - immigration_ft.city_code, immigration_ft.res_code] : i94 code assigned to where people are coming from 
+    cit_res_name (string) [not null] : i94 Country and city name where people are coming from
+    latitude (double) : Latitude of the country, mid point of the country
+    longitude (double) : Longitude of the country, mid point of the country
+    temp_january (double) : Average temperature in January in celcius of country/city between 2000 and 2013
+    temp_february (double) : Average temperature in February in celcius of country/city between 2000 and 2013
+    temp_march (double) : Average temperature in March in celcius of country/city between 2000 and 2013
+    temp_april (double) : Average temperature in April in celcius of country/city between 2000 and 2013
+    temp_may (double) : Average temperature in May in celcius of country/city between 2000 and 2013
+    temp_june (double) : Average temperature in June in celcius of country/city between 2000 and 2013
+    temp_july (double) : Average temperature in July in celcius of country/city between 2000 and 2013
+    temp_august (double) : Average temperature in August in celcius of country/city between 2000 and 2013
+    temp_september (double) : Average temperature in September in celcius of country/city between 2000 and 2013
+    temp_october (double) : Average temperature in October in celcius of country/city between 2000 and 2013
+    temp_november (double) : Average temperature in November in celcius of country/city between 2000 and 2013
+    temp_december (double) : Average temperature in December in celcius of country/city between 2000 and 2013
+ 
+airlines_dm (flights information on which passengers travelled to USA)
+    flight_id (integer) [primary key, serial, references - immigration_ft.flight_id] : Unique identifier of each flight
+    flight_number (string) [not null] : Number of flight assigned by the airline company
+    airline_code (string) [not null] : Operating code of the airline associated with the flight
+
+modes_dm (mode of transport when entering USA)
+   code (integer) [primary key, references - immigration_ft.mode] : code to identify how people got to USA
+   travel_mode (string) [not null] : identifies how people get into the USA eg. Air, Sea, Land
+ 
+visas_dm (type of visa applied and issued to the person entering USA, Key dimension for analytics to drive policy decisions)
+    code (integer) [primary key, references - immigration_ft.visa_code] : code to identify type of visa
+    travel_purpose (string)[not null] : purrpose of travel to USA, eg. Business
+ 
+ports_dm (ports where people got into USA and also where people coming from around the world)
+    code (string) [primary key, references - immigration_ft.port] : i94 code associated with the port of embarkment or destination port
+    port_name (string) [not null] : Name of the port associated with the i94 code, eg. PINNACLE ROAD, VT
+
+immigration_ft (fact table with individual records of people immigtrating to USA and their current status)
+    cicid (integer) [primary key] : unique identifier associated with an individual travller , travelling to USA
+    date_year (integer) [not null] : four digit year field associated with year of landing in USA
+    date_month (integer) [not null] : month as number associated with month of landing  in USA
+    city_code (integer) [not null] : code provided by i94 and some extras based on where person immigrated to
+    res_code (integer) [not null] : code provided by i94 and some extras based on where person resides
+    port (string) [not null] : i94 code associated with the port of embarkment or destination port
+    arr_date (date) [not null] : arrival date of passenger in USA
+    mode (integer) [not null] : code associated with mode of travel to USA
+    addr (string) : code associated with state where people may reside on entring USA
+    dept_date (date) : date of departure from USA, could be null if passenger have not left
+    age (integer) [not null] : age of individual entering USA
+    visa_code (integer) [not null] : visa code associated with type of visa issued for person entering the USA
+    counter (integer) [not null] : field understood by authorities and used for summary statistics
+    mat_flag (string): Match flag created by i94 to see if match of arrival and departure records
+    birth_year (integer) [not null] : year of birth of an individual
+    gender (string): gender of person eg. M for male
+    flight_id (integer): unique identifier created for each flight associated with the person
+    admission_number (integer) [not null] : admission number provided based on admission of entry into USA
+    visa_type (string) [not null] : Class of admission legally admitting the non-immigrant to temporarily stay in U.S
+    
