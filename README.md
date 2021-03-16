@@ -24,6 +24,7 @@ The section covers tools used to enable the project.
 ## Tables and Dictionaries
 
 Located in dataDictionary.txt
+[here](https://github.com/Nakulbajaj101/dataEngineeringCapstoneImmigration/blob/master/dataDictionary.txt)
 
 
 ## Data Model
