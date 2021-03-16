@@ -26,6 +26,10 @@ The section covers tools used to enable the project.
 Located in dataDictionary.txt
 
 
+## Data Model
+
+![alt text](https://github.com/Nakulbajaj101/dataEngineeringCapstoneImmigration/blob/master/DataModel.png?raw=true)
+
 ## Project Files and Folders
 
 1. etl.py - Contains all the logic to extract data from S3 and process data on spark and then load data as parquet files into the s3 folder and region specified by user.
